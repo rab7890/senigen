@@ -1,0 +1,8 @@
+3에서 genus는 특정 디렉토리안의 디렉토리 리스트
+species는 위 디렉토리안의 디렉토리 리스트
+k-mer Length, GC contents는 숫자 입력
+
+ps -e
+ps -ef
+
+kill -9 PID

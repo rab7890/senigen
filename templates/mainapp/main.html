@@ -1,0 +1,630 @@
+{% extends 'base.html' %}
+
+{% block top %}
+{% endblock %}
+{% block content %}
+    <style>
+        .container {
+            width: 100%;
+
+        }
+
+        .gray {
+            background-color: #ededed;
+            border: 2px solid #c9c9c9;
+        }
+
+        .area {
+            margin: 5rem 1rem;
+        }
+
+        .title {
+            background-color: #dcdcdc;
+            font-size: 1.3rem;
+            float: left;
+            border: 2px solid #c7c6c6;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            z-index: 50;
+            position: absolute;
+            top: -1.7rem;
+            color: #306396;
+        }
+
+        .btn-style {
+            float: outside;
+            width: 15rem;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .select-style {
+            width: 15rem;
+            margin: 0 1rem;
+            font-size: 1.2rem;
+            height: 100%;
+        }
+
+
+        input {
+            margin: 0 1rem;
+            font-size: 1.2rem;
+
+
+        }
+
+
+        div {
+            font-size: 1.2rem;
+        }
+
+        .div-label {
+            height: 100%;
+            margin: auto;
+            font-weight: bold;
+            text-align: right;
+        }
+
+
+    </style>
+    <style>
+        .Progress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        .Bar {
+            width: 0%;
+            height: 30px;
+            background-color: #04AA6D;
+        }
+
+        i.fa {
+            margin-left: 1rem;
+            font-size: 14pt;
+            position: relative;
+            top: 0.2rem;
+
+        }
+
+    </style>
+
+    <style>
+        .tabs {
+
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .tab_item {
+            margin-bottom: 0;
+            width: 50%;
+            height: 50px;
+            background-color: #dcdcdc;
+            line-height: 50px;
+            font-size: 16px;
+            text-align: center;
+            color: #333333;
+            display: block;
+            float: left;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-weight: normal;
+        }
+
+        .tab_item:hover {
+            opacity: 0.75;
+        }
+
+
+        input[name="tab_item"] {
+            display: none;
+        }
+
+        .tab_content {
+            display: none;
+            clear: both;
+            overflow: hidden;
+            background-color: #d2def4
+        }
+        #radio_region:checked ~ #radio_region_content,
+        #all:checked ~ #all_content
+
+         {
+            display: block;
+        }
+
+        /* 선택된 탭 스타일 */
+        .tabs input:checked + .tab_item {
+            background-color: #324890;
+            color: #fff;
+        }
+    </style>
+    <div class="row" style="margin-left: -0.1rem;margin-right: -0.1rem">
+    <div class="tabs">
+          <input id="radio_region" type="radio" name="tab_item" checked>
+        <label class="tab_item" for="radio_region">Find Specific Region</label>
+        <input id="all" type="radio" name="tab_item" >
+        <label class="tab_item" for="all">Database</label>
+
+
+        <div class="tab_content" id="all_content">
+            <div class="row gray area" style="z-index: 3;">
+
+                <div class="col-12 col-sm-12 col-md-12">
+                    <div class="title">Download and Update Genome <i id="first_icon" class="fa fa-question-circle"
+                                                                     title="first icon"></i></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 2.5rem">
+                    <textarea style="width: 100%; height: 110px;" id="genome_log"></textarea>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                    <div class="Progress">
+                        <div class="Bar" id="genome_progress"></div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12"
+                     style="margin-top:1.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0">
+                    <div class="row">
+                        <div class="col-3 col-sm-3 col-md-3" style="padding: 0;">
+                            {% csrf_token %}
+                            <style>
+                                input[type="file"] {
+                                    height: 3.1rem;
+                                }
+
+                                input[type="file"]::-webkit-file-upload-button {
+                                    height: 3.1rem;
+                                }
+                            </style>
+                            <input class="form-control-file" type="file" id="fileinput" multiple
+                                   style="margin-left: 1.5rem;"/>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2" style="padding: 0;left: -1.5rem">
+                            <button class="btn btn-primary btn-style block-able" onclick="uploadFile()">Upload</button>
+                        </div>
+
+                        <div class="col-4 col-sm-4 col-md-4" style="display: inline-flex;">
+                            <div style="margin: auto;margin-left: 3rem;font-weight: bold">Assembly Level</div>
+                            <select class="form-control select-style" id="genome_level" style="height: 3.3rem">
+                                <option value="Contig">Contig</option>
+                                <option value="Scaffold">Scaffold</option>
+                                <option value="Chromosome">Chromosome</option>
+                                <option value="Complete_Genome">Complete_Genome</option>
+                            </select>
+                        </div>
+
+                        <div class="col-3 col-sm-3 col-md-3" style="text-align: right;">
+                            <button class="btn btn-primary btn-style block-able" style="margin: 0;"
+                                    onclick="genome_run()">
+                                Run
+                            </button>
+                            <button class="btn btn-primary btn-style genome-stop" style="float: right;"
+                                    onclick="execute_stop('GENOME')">Stop
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin: 1rem 0;text-align: right">
+                    <div id="genome_last_info"></div>
+                </div>
+            </div>
+
+            <div class="row gray area">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <div class="title">GTDBTK Classification <i id="second_icon" class="fa fa-question-circle"
+                                                                title="second icon"></i></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
+                    <textarea style="width: 100%; height: 110px;" id="gtdbtk_log"></textarea>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                    <div class="Progress">
+                        <div class="Bar" id="gtdbtk_progress"></div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-12"
+                     style="margin-top:0.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0; padding: 1rem">
+                    <button class="btn btn-primary btn-style block-able" style="float: right" onclick="gtdbtk_run()">Run
+                    </button>
+                    <button class="btn btn-primary btn-style gtdbtk-stop" style="float: right;"
+                            onclick="execute_stop('GTDBTK')">Stop
+                    </button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin: 0;margin-bottom: 1rem;text-align: right">
+                    <div id="gtdbtk_last_info"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab_content" id="radio_region_content">
+            <div class="row gray area">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <div class="title">Find Specific Region <i id="third_icon" class="fa fa-question-circle"
+                                                               title="third icon"></i></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
+                    <textarea style="width: 100%; height: 110px;" id="region_log"></textarea>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                    <div class="Progress">
+                        <div class="Bar" id="region_progress"></div>
+                    </div>
+                </div>
+                <style>
+                    label {
+                        float: right;
+                    }
+
+                </style>
+                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; padding: 1rem;text-align: center">
+                    <div class="col-6 col-sm-6 col-md-6" style="margin-left: -5rem;">
+                        <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
+                            <div class="div-label">GENUS</div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6">
+
+                            <select class="form-control select-style" id="region_genus">
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6">
+
+                        <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
+                            <div class="div-label">Species</div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6">
+                            <select class="form-control select-style" id="region_species">
+
+
+                            </select>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; text-align: center">
+
+                    <div class="col-6 col-sm-6 col-md-6" style="margin: 0;margin-left: -5rem; padding: 0">
+                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: -0.4rem">
+                            <div class="div-label">K-mer Length</div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6" style="padding-left: 1.2rem">
+                            <input id="region_K_mer_length" type="text"
+                                   style="width: 15rem; height: 2.6rem;margin-left: 1rem; float:left;"/>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6">
+                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: 0.1rem">
+                            <div class="div-label">GC contents</div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding-left: 1.8rem">
+                            <div style="float: left">
+                                <input id="region_GC_min" type="text" style="width: 6rem;height: 2.6rem;"/>~
+                                <input id="region_GC_max" type="text" style="width: 6rem;height: 2.6rem;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0;margin-top: 1rem; padding: 0 1rem">
+                    <button class="btn btn-primary btn-style block-able" style="float: right" onclick="region_run()">Run
+                    </button>
+                    <button class="btn btn-primary btn-style region-stop" style="float: right;"
+                            onclick="execute_stop('REGION')">Stop
+                    </button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                    <textarea style="width: 100%; height: 200px;" id="region_result_txt"></textarea>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12"
+                     style="margin: 1rem 0;margin-bottom: 0.5rem; padding:0 1rem; padding-bottom:1rem">
+                    <button class="btn btn-primary btn-style block-able" style="float: right"
+                            onclick="download_region_file()">
+                        Download Result
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+    <script>
+        // 3초 마다 상태 체크
+        const idVar = setInterval(() => {
+            check_status()
+        }, 3000);
+
+        $(document).ready(function () {
+            $("#first_icon").tooltip();
+            $("#second_icon").tooltip();
+            $("#third_icon").tooltip();
+
+            var elem = document.getElementById("genome_progress");
+            elem.style.width = "0%";
+            var elem = document.getElementById("gtdbtk_progress");
+            elem.style.width = "0%";
+            var elem = document.getElementById("region_progress");
+            elem.style.width = "0%";
+
+            check_status();
+
+
+        });
+
+        function do_block() {
+            $(".block-able").hide();
+
+        }
+
+        function do_visible() {
+            $(".block-able").show();
+            $(".genome-stop").hide();
+            $(".gtdbtk-stop").hide();
+            $(".region-stop").hide();
+
+        }
+
+        function check_status() {
+            console.log('check')
+            $.ajax({
+                url: '{% url "mainapp:check" %}',
+                data: {},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // 로그 & 마지막 업데이트 날짜
+                    $("#genome_log").text(data.GENOME_status_log);
+                    $("#genome_last_info").text(data.GENOME_last_updated);
+                    $("#gtdbtk_log").text(data.GTDBTK_status_log);
+                    $("#gtdbtk_last_info").text(data.GTDBTK_last_updated);
+                    $("#region_log").text(data.REGION_status_log);
+                    $('#region_genus').empty();
+                    $('#region_species').empty();
+                    //set region select
+                    for (var i = 0; i < data.genus_select.length; i++) {
+                        $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
+                    }
+                    for (var i = 0; i < data.species_select.length; i++) {
+                        $('#region_species').append(new Option(data.species_select[i], data.species_select[i]));
+                    }
+                    // 실행 상태
+                    if (data.state == 'RUNNING') {
+                        if (data.status == "GENOME") {
+                            do_block();
+                            var elem = document.getElementById("genome_progress");
+                            var width = data.process_current
+                            elem.style.width = width + "%";
+                            $(".genome-stop").show();
+                            $(".gtdbtk-stop").hide();
+                            $(".region-stop").hide();
+
+                        } else if (data.status == "GTDBTK") {
+                            do_block();
+                            var elem = document.getElementById("gtdbtk_progress");
+                            var width = data.process_current
+                            elem.style.width = width + "%";
+                            $(".genome-stop").hide();
+                            $(".gtdbtk-stop").show();
+                            $(".region-stop").hide();
+                        } else if (data.status == "REGION") {
+                            do_block();
+                            var elem = document.getElementById("");
+                            var width = data.process_current
+                            elem.style.width = width + "%";
+                            $(".genome-stop").hide();
+                            $(".gtdbtk-stop").hide();
+                            $(".region-stop").show();
+                        }
+
+
+                    }
+                    // 대기 상태
+                    else if (data.state == "IDLE") {
+                        do_visible();
+
+                        var elem = document.getElementById("genome_progress");
+                        elem.style.width = "0%";
+                        var elem1 = document.getElementById("gtdbtk_progress");
+                        elem1.style.width = "0%";
+                        var elem1 = document.getElementById("region_progress");
+                        elem1.style.width = "0%";
+                    }
+                    // db validation fail
+                    else if (data.state == "fail") {
+                        alert(data.msg);
+                        do_block();
+                        clearInterval(idVar);
+                    }
+                    // exception 경우
+                    else if (data.state == "error") {
+                        if (data.error_type == 'GENOME') {
+                            $("#genome_log").text('오류 발생' + data.msg);
+                        } else if (data.error_type == 'GTDBTK') {
+                            $("#gtdbtk_log").text('오류 발생' + data.msg);
+                        } else if (data.error_type == 'REGION') {
+                            $("#region_log").text('오류 발생' + data.msg);
+                        }
+                        do_visible();
+
+                    }
+
+
+                }
+            });
+        }
+
+        function uploadFile() {
+            let formData = new FormData()
+            var input = document.getElementById('fileinput');
+            var files = input.files;
+            if (files.length == 0) {
+                return false;
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i])
+            }
+            formData.append('csrfmiddlewaretoken', $("[name=csrfmiddlewaretoken]").val());
+            $.ajax({
+                url: '{% url 'mainapp:genome_upload' %}',
+                data: formData,
+                type: 'POST',
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    if (data.status == 'success') {
+
+
+                    } else {
+
+
+                    }
+
+                }, error: function () {
+
+                }
+            });
+        }
+
+        function execute_stop(type) {
+            $.ajax({
+                url: '{% url "mainapp:stop" %}',
+                data: {'type': type},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.status == 'success') {
+
+                        do_visible();
+                    } else {
+                        alert(data.msg)
+                    }
+
+                }
+            });
+        }
+
+        function genome_run() {
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+            var data = {'parameter': $("#genome_level").val(), 'csrfmiddlewaretoken': csrftoken,}
+            do_block()
+            $(".genome-stop").show();
+            $.ajax({
+                url: '{% url "mainapp:genome_run" %}',
+                data: data,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.status == 'success') {
+
+                    } else {
+
+                    }
+
+                }
+            });
+        }
+
+        function gtdbtk_run() {
+            do_block()
+            $(".gtdbtk-stop").show();
+            $.ajax({
+                url: '{% url "mainapp:gtdbtk_run" %}',
+                data: {},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.status == 'success') {
+
+                    } else {
+
+                    }
+
+                }
+            });
+        }
+
+        function region_run() {
+
+
+            // validation
+            console.log($("#region_K_mer_length").val());
+            if ($("#region_K_mer_length").val() == '' || $("#region_GC_min").val() == '' || $("#region_GC_max").val() == '') {
+                alert('빈 값이 있습니다.');
+                return false;
+            }
+            do_block();
+            $(".region-stop").show();
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+            var data = {
+                'region_genus': $("#region_genus").val(),
+                'csrfmiddlewaretoken': csrftoken,
+                'region_species': $("#region_species").val(),
+                'region_K_mer_length': $("#region_K_mer_length").val(),
+                'region_GC_min': $("#region_GC_min").val(),
+                'region_GC_max': $("#region_GC_max").val()
+            }
+
+            $.ajax({
+                url: '{% url "mainapp:region_run" %}',
+                data: data,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.status == 'success') {
+
+                    } else {
+
+                    }
+
+                }
+            });
+        }
+
+        function download_region_file() {
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            var data = {
+                'csrfmiddlewaretoken': csrftoken,
+            }
+            $.ajax({
+                url: '{% url 'mainapp:region_download' %}',
+                method: 'POST',
+                data: data,
+                success: function (data) {
+                    var element = document.createElement('a');
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+                    element.setAttribute('download', 'download.txt');
+
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+
+                    element.click();
+
+                    document.body.removeChild(element);
+                },
+                error: function (err) {
+                    console.log('Error downloading file');
+                }
+            });
+        }
+    </script>
+{% endblock %}
