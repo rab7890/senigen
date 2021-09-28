@@ -17,12 +17,16 @@ class DBController:
 
     ##### main info
     def set_main_error(self, msg):
-        print(msg)
+
         conn = sqlite3.connect(self.db_file)
-        conn.execute(
-            "UPDATE main_info set is_error = TRUE, error_msg = '{0}', error_type = '{1}' WHERE id = '1';".format(msg,
-                                                                                                               self.type))
-        conn.commit()
+        try:
+            conn.execute(
+                "UPDATE main_info set is_error = TRUE, error_msg = '{0}', error_type = '{1}' WHERE id = '1';".format(msg,
+                                                                                                                   self.type))
+            conn.commit()
+        except Exception as e:
+            print("error is occurred when update set_main_error db.")
+            print("origin error : {}".format(msg))
         conn.close()
 
     def init_main_error(self):
