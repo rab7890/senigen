@@ -68,7 +68,7 @@ class DBController:
         conn = sqlite3.connect(self.db_file)
         conn.execute(
             "UPDATE {0} set progress_total_value = {1}, progress_current_value = 0 WHERE id = '1';".format(self.table_name
-                                                                                                         , total))
+                                                                                                         ,total))
         conn.commit()
         conn.close()
 
@@ -78,6 +78,13 @@ class DBController:
         conn = sqlite3.connect(self.db_file)
         conn.execute(
             "UPDATE {0} set progress_current_value = '{1}' WHERE id = '1';".format(self.table_name, cur))
+        conn.commit()
+        conn.close()
+
+    def zero_process(self):
+        conn = sqlite3.connect(self.db_file)
+        conn.execute(
+            "UPDATE {0} set progress_current_value = 0, progress_total_value = 0  WHERE id = '1';".format(self.table_name))
         conn.commit()
         conn.close()
 

@@ -154,10 +154,6 @@ def GC_Filter():
     fin.close()
     fout.close()
 
-
-
-
-
 if __name__ == '__main__':
     try:
         ##### MAIN #####
@@ -173,6 +169,7 @@ if __name__ == '__main__':
         dbc.set_running()
         Specific_in_genus(dbc)
         Mapping(dbc)
+        dbc.set_idle()
     except Exception as e:
         dbc.set_main_error(str(e))
         dbc.set_idle()
