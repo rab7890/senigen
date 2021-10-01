@@ -18,6 +18,7 @@ class DBController:
     ##### main info
     def set_main_error(self, msg):
         print("error update : {}".format(msg))
+        msg.replace("'", "")
         conn = sqlite3.connect(self.db_file)
         try:
             conn.execute(
@@ -80,7 +81,7 @@ class DBController:
         cur = round(val/total * 100, 1)
         conn = sqlite3.connect(self.db_file)
         conn.execute(
-            "UPDATE {0} set progress_current_value = '{1}' WHERE id = '1';".format(self.table_name, cur))
+            "UPDATE {0} set progress_current_value = '{1}', progress_total_value = '{2}' WHERE id = '1';".format(self.table_name, cur, total))
         conn.commit()
         conn.close()
 

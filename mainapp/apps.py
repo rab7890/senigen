@@ -1,4 +1,5 @@
 import os
+import sqlite3
 
 from django.apps import AppConfig
 from django.utils import timezone
@@ -28,4 +29,10 @@ class MainappConfig(AppConfig):
 
         main.objects.filter(id=1).update(error_type='', error_msg='',
                                                 is_error=False)
-
+        """ db가 lock 되는 현상?
+        full_path = os.path.realpath(__file__)
+        current = os.path.dirname(full_path)
+        current = str(Path(current).resolve().parent)
+        conn = sqlite3.connect(current + '/db.sqlite3')
+        conn.close()
+        """

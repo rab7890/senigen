@@ -1,4 +1,5 @@
 import sys, glob, os
+import traceback
 
 from pathlib import Path
 from Bio import SeqIO
@@ -24,13 +25,16 @@ def Specific_in_genus(dbc):
     os.chdir(SPECIFICPATH)
 
     species_file_list = glob.glob(GTDBTKPATH + "/reassigned/"+Genus+"/"+Species+"/*.fna")
+    print("species_file_list")
+    print(species_file_list)
     total = len(species_file_list)
     in_genus = os.listdir(GTDBTKPATH + "/reassigned/" + Genus)
     genus_target_folder = set(in_genus) - set([Species])
     except_list = []
     for target_folder in genus_target_folder:
         except_list += glob.glob(GTDBTKPATH + "/reassigned/"+Genus+"/"+target_folder+"/*.fna")
-
+    print("except_list")
+    print(except_list)
     fout = open(SPECIFICPATH + "/Uniq.txt", 'w')
     #fout2=open("log.txt",'w')
 
@@ -44,7 +48,7 @@ def Specific_in_genus(dbc):
     for file_name in species_file_list:
         if FLAG == 1:
             FLAG += 1
-            fin = open(SPECIFICPATH + "/" + file_name, 'r')
+            fin = open(file_name, 'r')
             for sequence in SeqIO.parse(fin, 'fasta'):
                 num_kmers = len(str(sequence.seq)) - int(k_length) + 1
                 forward = str(sequence.seq)
@@ -54,12 +58,12 @@ def Specific_in_genus(dbc):
                     sub_1.append(kmer)
                     kmer_r = reverse[i:i + int(k_length)]
                     sub_1.append(kmer_r)
-                sub_1 = set(sub_1)
+                sub_1 = list(set(sub_1))
                 #fout2.write(str(len(sub_1))+"\n")
                 #fout2.flush()
             fin.close()
         else:
-            fin = open(SPECIFICPATH + "/" + file_name, 'r')
+            fin = open(file_name, 'r')
             for sequence in SeqIO.parse(fin, 'fasta'):
                 num_kmers=len(str(sequence.seq)) - int(k_length) + 1
                 forward = str(sequence.seq)
@@ -69,7 +73,7 @@ def Specific_in_genus(dbc):
                     sub_2.append(kmer)
                     kmer_r = reverse[i:i + int(k_length)]
                     sub_2.append(kmer_r)
-                sub_2 = set(sub_2)
+                sub_2 = list(set(sub_2))
                 sub_1 = set(sub_1) & set(sub_2)
                 print(len(sub_1))
                 #fout2.write(str(len(sub_1))+"\n")
@@ -79,13 +83,13 @@ def Specific_in_genus(dbc):
         dbc.set_status_log("Specific_in_genus {}/{} 진행 중 ".format(cnt, total))
         cnt += 1
         dbc.set_process(cnt, total)
-    Common=sub_1
+    Common = sub_1
     dbc.set_status_log("start except_list")
     total = len(except_list)
     for file_name in except_list:
         #fout2.write(file_name+"\n")
         #fout2.flush()
-        fin = open(SPECIFICPATH + "/" + file_name, 'r')
+        fin = open(file_name, 'r')
         for sequence in SeqIO.parse(fin, 'fasta'):
             num_kmers = len(str(sequence.seq)) - int(k_length) + 1
             forward = str(sequence.seq)
@@ -106,6 +110,8 @@ def Specific_in_genus(dbc):
 
     dbc.set_status_log("start write kmer")
     cnt = 0
+    print("Common")
+    print(Common)
     total = len(Common)
     for kmer in Common :
         fout.write(">"+Species+"_"+str(CNT_uniq)+"\n")
@@ -175,5 +181,6 @@ if __name__ == '__main__':
         Mapping(dbc)
         dbc.set_idle()
     except Exception as e:
+        print(traceback.format_exc())
         dbc.set_main_error(str(e))
         dbc.set_idle()
