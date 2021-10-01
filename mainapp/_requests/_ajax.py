@@ -53,14 +53,12 @@ def check_status(request):
     # Region 폴더 -> select
     try:
         if sys.platform == "win32":
-            dirs = os.listdir(MEDIA_ROOT + '\\test')
+            dirs = os.listdir(MEDIA_ROOT + '\\GTDBTK\\reassigned')
         else:
-            dirs = os.listdir(MEDIA_ROOT + '/test')
+            dirs = os.listdir(MEDIA_ROOT + '/GTDBTK/reassigned')
         data['genus_select'] = dirs
-        data['species_select'] = dirs
     except:
         data['genus_select'] = []
-        data['species_select'] = []
         pass
 
 
@@ -97,6 +95,22 @@ def check_status(request):
             data['status'] = "REGION"
             data['process_total'] = region_obj.progress_total_value
             data['process_current'] = region_obj.progress_current_value
+    return JsonResponse(data)
+
+def load_Species_path(request):
+    genus = request.GET.get("genus")
+    data = {}
+    try:
+        if sys.platform == "win32":
+            dirs = os.listdir(MEDIA_ROOT + '\\GTDBTK\\reassigned\\' + genus)
+        else:
+            dirs = os.listdir(MEDIA_ROOT + '/GTDBTK/reassigned/' + genus)
+        data['species_select'] = dirs
+    except:
+        data['species_select'] = []
+        pass
+
+    data['status'] = 'success'
     return JsonResponse(data)
 
 @csrf_protect
@@ -169,6 +183,7 @@ def region_run(request):
     k_length = request.POST.get('region_K_mer_length')
     GC_ratio_min = request.POST.get('region_GC_min')
     GC_ratio_max = request.POST.get('region_GC_max')
+
     proc = subprocess.Popen("python3 " + current_path + rel + " {} {} {} {} {}".format(genus,
                                                                                        species, k_length, GC_ratio_min,
                                                                                        GC_ratio_max),

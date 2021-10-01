@@ -359,6 +359,43 @@
 
             check_status();
 
+            $('#region_genus').change(function (){
+
+                var form = new FormData();
+                var a = $('#region_genus').val()
+                console.log(a);
+                form.append("genus", $('#region_genus').val())
+                $.ajax({
+                url: '{% url 'mainapp:get_species_path' %}',
+                data: {genus:$('#region_genus').val()},
+                type: 'get',
+                dataType : "json",
+                success: function (data) {
+
+
+                    if (data.status == 'success') {
+                        $('#region_species').empty();
+                          for (var i = 0; i < data.species_select.length; i++) {
+                    if ($("#region_species option[value='" + data.species_select[i] + "']").length > 0) {
+
+                    } else {
+                        $('#region_species').append(new Option(data.species_select[i], data.species_select[i]));
+                    }
+                }
+
+                    } else {
+
+
+                    }
+
+                }, error: function () {
+
+                }
+            });
+
+
+
+            })
 
         });
 
@@ -389,15 +426,20 @@
                     $("#gtdbtk_log").text(data.GTDBTK_status_log);
                     $("#gtdbtk_last_info").text(data.GTDBTK_last_updated);
                     $("#region_log").text(data.REGION_status_log);
-                    $('#region_genus').empty();
-                    $('#region_species').empty();
                     //set region select
                     for (var i = 0; i < data.genus_select.length; i++) {
-                        $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
+
+
+                        if ($("#region_genus option[value='"+ data.genus_select[i] +"']").length > 0)
+                        {
+
+                        }
+                        else
+                        {
+                            $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
+                        }
                     }
-                    for (var i = 0; i < data.species_select.length; i++) {
-                        $('#region_species').append(new Option(data.species_select[i], data.species_select[i]));
-                    }
+
                     // 실행 상태
                     if (data.state == 'RUNNING') {
                         if (data.status == "GENOME") {

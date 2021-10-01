@@ -166,6 +166,10 @@ if __name__ == '__main__':
         k_length = sys.argv[3]
         GC_ratio_min = sys.argv[4]
         GC_ratio_max = sys.argv[5]
+        print("command args genus : {} / species : {} / k_length : {} / GC_ratio_min : {} / GC_ratio_max : {}".format(Genus, Species,
+                                                                                                         k_length
+                                                                                                         , GC_ratio_min,
+                                                                                                         GC_ratio_max))
         dbc.set_running()
         Specific_in_genus(dbc)
         Mapping(dbc)
