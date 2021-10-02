@@ -50,16 +50,6 @@ def check_status(request):
         data['REGION_last_updated'] = region_obj.last_run_date.strftime("%Y-%m-%d %H:%M")
     else:
         data['REGION_last_updated'] = 'No Data'
-    # Region 폴더 -> select
-    try:
-        if sys.platform == "win32":
-            dirs = os.listdir(MEDIA_ROOT + '\\GTDBTK\\reassigned')
-        else:
-            dirs = os.listdir(MEDIA_ROOT + '/GTDBTK/reassigned')
-        data['genus_select'] = dirs
-    except:
-        data['genus_select'] = []
-        pass
 
 
 
@@ -105,11 +95,28 @@ def load_Species_path(request):
             dirs = os.listdir(MEDIA_ROOT + '\\GTDBTK\\reassigned\\' + genus)
         else:
             dirs = os.listdir(MEDIA_ROOT + '/GTDBTK/reassigned/' + genus)
+        dirs.sort()
         data['species_select'] = dirs
     except:
         data['species_select'] = []
         pass
 
+    data['status'] = 'success'
+    return JsonResponse(data)
+
+def load_genus_path(request):
+    # Region 폴더 -> select
+    data = {}
+    try:
+        if sys.platform == "win32":
+            dirs = os.listdir(MEDIA_ROOT + '\\GTDBTK\\reassigned')
+        else:
+            dirs = os.listdir(MEDIA_ROOT + '/GTDBTK/reassigned')
+        dirs.sort()
+        data['genus_select'] = dirs
+    except:
+        data['genus_select'] = []
+        pass
     data['status'] = 'success'
     return JsonResponse(data)
 

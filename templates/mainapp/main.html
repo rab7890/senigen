@@ -130,10 +130,9 @@
             overflow: hidden;
             background-color: #d2def4
         }
-        #radio_region:checked ~ #radio_region_content,
-        #all:checked ~ #all_content
 
-         {
+        #radio_region:checked ~ #radio_region_content,
+        #all:checked ~ #all_content {
             display: block;
         }
 
@@ -144,199 +143,202 @@
         }
     </style>
     <div class="row" style="margin-left: -0.1rem;margin-right: -0.1rem">
-    <div class="tabs">
-          <input id="radio_region" type="radio" name="tab_item" checked>
-        <label class="tab_item" for="radio_region">Find Specific Region</label>
-        <input id="all" type="radio" name="tab_item" >
-        <label class="tab_item" for="all">Database</label>
+        <div class="tabs">
+            <input id="radio_region" type="radio" name="tab_item" checked>
+            <label class="tab_item" for="radio_region">Find Specific Region</label>
+            <input id="all" type="radio" name="tab_item">
+            <label class="tab_item" for="all">Database</label>
 
 
-        <div class="tab_content" id="all_content">
-            <div class="row gray area" style="z-index: 3;">
+            <div class="tab_content" id="all_content">
+                <div class="row gray area" style="z-index: 3;">
 
-                <div class="col-12 col-sm-12 col-md-12">
-                    <div class="title">Download and Update Genome <i id="first_icon" class="fa fa-question-circle"
-                                                                     title="first icon"></i></div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 2.5rem">
-                    <textarea style="width: 100%; height: 110px;" id="genome_log"></textarea>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
-                    <div class="Progress">
-                        <div class="Bar" id="genome_progress"></div>
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <div class="title">Download and Update Genome <i id="first_icon" class="fa fa-question-circle"
+                                                                         title="first icon"></i></div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12"
-                     style="margin-top:1.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0">
-                    <div class="row">
-                        <div class="col-3 col-sm-3 col-md-3" style="padding: 0;">
-                            {% csrf_token %}
-                            <style>
-                                input[type="file"] {
-                                    height: 3.1rem;
-                                }
-
-                                input[type="file"]::-webkit-file-upload-button {
-                                    height: 3.1rem;
-                                }
-                            </style>
-                            <input class="form-control-file" type="file" id="fileinput" multiple
-                                   style="margin-left: 1.5rem;"/>
-                        </div>
-                        <div class="col-2 col-sm-2 col-md-2" style="padding: 0;left: -1.5rem">
-                            <button class="btn btn-primary btn-style block-able" onclick="uploadFile()">Upload</button>
-                        </div>
-
-                        <div class="col-4 col-sm-4 col-md-4" style="display: inline-flex;">
-                            <div style="margin: auto;margin-left: 3rem;font-weight: bold">Assembly Level</div>
-                            <select class="form-control select-style" id="genome_level" style="height: 3.3rem">
-                                <option value="Contig">Contig</option>
-                                <option value="Scaffold">Scaffold</option>
-                                <option value="Chromosome">Chromosome</option>
-                                <option value="Complete_Genome">Complete_Genome</option>
-                            </select>
-                        </div>
-
-                        <div class="col-3 col-sm-3 col-md-3" style="text-align: right;">
-                            <button class="btn btn-primary btn-style block-able" style="margin: 0;"
-                                    onclick="genome_run()">
-                                Run
-                            </button>
-                            <button class="btn btn-primary btn-style genome-stop" style="float: right;"
-                                    onclick="execute_stop('GENOME')">Stop
-                            </button>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 2.5rem">
+                        <textarea style="width: 100%; height: 110px;" id="genome_log"></textarea>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                        <div class="Progress">
+                            <div class="Bar" id="genome_progress"></div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin: 1rem 0;text-align: right">
-                    <div id="genome_last_info"></div>
-                </div>
-            </div>
+                    <div class="col-12 col-sm-12 col-md-12"
+                         style="margin-top:1.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0">
+                        <div class="row">
+                            <div class="col-3 col-sm-3 col-md-3" style="padding: 0;">
+                                {% csrf_token %}
+                                <style>
+                                    input[type="file"] {
+                                        height: 3.1rem;
+                                    }
 
-            <div class="row gray area">
-                <div class="col-12 col-sm-12 col-md-12">
-                    <div class="title">GTDBTK Classification <i id="second_icon" class="fa fa-question-circle"
-                                                                title="second icon"></i></div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
-                    <textarea style="width: 100%; height: 110px;" id="gtdbtk_log"></textarea>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
-                    <div class="Progress">
-                        <div class="Bar" id="gtdbtk_progress"></div>
-                    </div>
-                </div>
+                                    input[type="file"]::-webkit-file-upload-button {
+                                        height: 3.1rem;
+                                    }
+                                </style>
+                                <input class="form-control-file" type="file" id="fileinput" multiple
+                                       style="margin-left: 1.5rem;"/>
+                            </div>
+                            <div class="col-2 col-sm-2 col-md-2" style="padding: 0;left: -1.5rem">
+                                <button class="btn btn-primary btn-style block-able" onclick="uploadFile()">Upload
+                                </button>
+                            </div>
 
-                <div class="col-12 col-sm-12 col-md-12"
-                     style="margin-top:0.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0; padding: 1rem">
-                    <button class="btn btn-primary btn-style block-able" style="float: right" onclick="gtdbtk_run()">Run
-                    </button>
-                    <button class="btn btn-primary btn-style gtdbtk-stop" style="float: right;"
-                            onclick="execute_stop('GTDBTK')">Stop
-                    </button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin: 0;margin-bottom: 1rem;text-align: right">
-                    <div id="gtdbtk_last_info"></div>
-                </div>
-            </div>
-        </div>
-        <div class="tab_content" id="radio_region_content">
-            <div class="row gray area">
-                <div class="col-12 col-sm-12 col-md-12">
-                    <div class="title">Find Specific Region <i id="third_icon" class="fa fa-question-circle"
-                                                               title="third icon"></i></div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
-                    <textarea style="width: 100%; height: 110px;" id="region_log"></textarea>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
-                    <div class="Progress">
-                        <div class="Bar" id="region_progress"></div>
-                    </div>
-                </div>
-                <style>
-                    label {
-                        float: right;
-                    }
+                            <div class="col-4 col-sm-4 col-md-4" style="display: inline-flex;">
+                                <div style="margin: auto;margin-left: 3rem;font-weight: bold">Assembly Level</div>
+                                <select class="form-control select-style" id="genome_level" style="height: 3.3rem">
+                                    <option value="Contig">Contig</option>
+                                    <option value="Scaffold">Scaffold</option>
+                                    <option value="Chromosome">Chromosome</option>
+                                    <option value="Complete_Genome">Complete_Genome</option>
+                                </select>
+                            </div>
 
-                </style>
-                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; padding: 1rem;text-align: center">
-                    <div class="col-6 col-sm-6 col-md-6" style="margin-left: -5rem;">
-                        <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
-                            <div class="div-label">GENUS</div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-6">
-
-                            <select class="form-control select-style" id="region_genus">
-
-                                <option value="">------------</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-6">
-
-                        <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
-                            <div class="div-label">Species</div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-6">
-                            <select class="form-control select-style" id="region_species">
-
-
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; text-align: center">
-
-                    <div class="col-6 col-sm-6 col-md-6" style="margin: 0;margin-left: -5rem; padding: 0">
-                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: -0.4rem">
-                            <div class="div-label">K-mer Length</div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-6" style="padding-left: 1.2rem">
-                            <input id="region_K_mer_length" type="text"
-                                   style="width: 15rem; height: 2.6rem;margin-left: 1rem; float:left;"/>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-6">
-                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: 0.1rem">
-                            <div class="div-label">GC contents</div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding-left: 1.8rem">
-                            <div style="float: left">
-                                <input id="region_GC_min" type="text" style="width: 6rem;height: 2.6rem;"/>~
-                                <input id="region_GC_max" type="text" style="width: 6rem;height: 2.6rem;"/>
+                            <div class="col-3 col-sm-3 col-md-3" style="text-align: right;">
+                                <button class="btn btn-primary btn-style block-able" style="margin: 0;"
+                                        onclick="genome_run()">
+                                    Run
+                                </button>
+                                <button class="btn btn-primary btn-style genome-stop" style="float: right;"
+                                        onclick="execute_stop('GENOME')">Stop
+                                </button>
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-12 col-sm-12 col-md-12" style="margin: 1rem 0;text-align: right">
+                        <div id="genome_last_info"></div>
+                    </div>
                 </div>
 
+                <div class="row gray area">
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <div class="title">GTDBTK Classification <i id="second_icon" class="fa fa-question-circle"
+                                                                    title="second icon"></i></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
+                        <textarea style="width: 100%; height: 110px;" id="gtdbtk_log"></textarea>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                        <div class="Progress">
+                            <div class="Bar" id="gtdbtk_progress"></div>
+                        </div>
+                    </div>
 
-                <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0;margin-top: 1rem; padding: 0 1rem">
-                    <button class="btn btn-primary btn-style block-able" style="float: right" onclick="region_run()">Run
-                    </button>
-                    <button class="btn btn-primary btn-style region-stop" style="float: right;"
-                            onclick="execute_stop('REGION')">Stop
-                    </button>
+                    <div class="col-12 col-sm-12 col-md-12"
+                         style="margin-top:0.5rem;margin-bottom: 0;margin-left: 0;margin-right: 0; padding: 1rem">
+                        <button class="btn btn-primary btn-style block-able" style="float: right"
+                                onclick="gtdbtk_run()">Run
+                        </button>
+                        <button class="btn btn-primary btn-style gtdbtk-stop" style="float: right;"
+                                onclick="execute_stop('GTDBTK')">Stop
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin: 0;margin-bottom: 1rem;text-align: right">
+                        <div id="gtdbtk_last_info"></div>
+                    </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
-                    <textarea style="width: 100%; height: 200px;" id="region_result_txt"></textarea>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12"
-                     style="margin: 1rem 0;margin-bottom: 0.5rem; padding:0 1rem; padding-bottom:1rem">
-                    <button class="btn btn-primary btn-style block-able" style="float: right"
-                            onclick="download_region_file()">
-                        Download Result
-                    </button>
-                </div>
-
             </div>
-        </div>
+            <div class="tab_content" id="radio_region_content">
+                <div class="row gray area">
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <div class="title">Find Specific Region <i id="third_icon" class="fa fa-question-circle"
+                                                                   title="third icon"></i></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
+                        <textarea style="width: 100%; height: 110px;" id="region_log"></textarea>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                        <div class="Progress">
+                            <div class="Bar" id="region_progress"></div>
+                        </div>
+                    </div>
+                    <style>
+                        label {
+                            float: right;
+                        }
 
+                    </style>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; padding: 1rem;text-align: center">
+                        <div class="col-6 col-sm-6 col-md-6" style="margin-left: -5rem;">
+                            <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
+                                <div class="div-label">GENUS</div>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6">
+
+                                <select class="form-control select-style" id="region_genus">
+
+                                    <option value="">------------</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6">
+
+                            <div class="col-6 col-sm-6 col-md-6" style="margin:auto;padding: 0.5rem">
+                                <div class="div-label">Species</div>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6">
+                                <select class="form-control select-style" id="region_species">
+
+
+                                </select>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0; text-align: center">
+
+                        <div class="col-6 col-sm-6 col-md-6" style="margin: 0;margin-left: -5rem; padding: 0">
+                            <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: -0.4rem">
+                                <div class="div-label">K-mer Length</div>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6" style="padding-left: 1.2rem">
+                                <input id="region_K_mer_length" type="text"
+                                       style="width: 15rem; height: 2.6rem;margin-left: 1rem; float:left;"/>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6">
+                            <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding: 0.3rem;left: 0.1rem">
+                                <div class="div-label">GC contents</div>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6" style="margin: 0;padding-left: 1.8rem">
+                                <div style="float: left">
+                                    <input id="region_GC_min" type="text" style="width: 6rem;height: 2.6rem;"/>~
+                                    <input id="region_GC_max" type="text" style="width: 6rem;height: 2.6rem;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-sm-12 col-md-12" style="margin: 0.5rem 0;margin-top: 1rem; padding: 0 1rem">
+                        <button class="btn btn-primary btn-style block-able" style="float: right"
+                                onclick="region_run()">Run
+                        </button>
+                        <button class="btn btn-primary btn-style region-stop" style="float: right;"
+                                onclick="execute_stop('REGION')">Stop
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12" style="margin-top: 1rem">
+                        <textarea style="width: 100%; height: 200px;" id="region_result_txt"></textarea>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12"
+                         style="margin: 1rem 0;margin-bottom: 0.5rem; padding:0 1rem; padding-bottom:1rem">
+                        <button class="btn btn-primary btn-style block-able" style="float: right"
+                                onclick="download_region_file()">
+                            Download Result
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 
 
 
@@ -347,6 +349,7 @@
         }, 3000);
 
         $(document).ready(function () {
+             get_genus_path();
             $("#first_icon").tooltip();
             $("#second_icon").tooltip();
             $("#third_icon").tooltip();
@@ -359,31 +362,68 @@
             elem.style.width = "0%";
 
             check_status();
-
-            $('#region_genus').change(function (){
+            $('.tab_item').on('click', function () {
+                get_genus_path();
+            })
+            $('#region_genus').change(function () {
 
                 var form = new FormData();
                 var a = $('#region_genus').val()
                 console.log(a);
                 form.append("genus", $('#region_genus').val())
                 $.ajax({
-                url: '{% url 'mainapp:get_species_path' %}',
-                data: {genus:$('#region_genus').val()},
+                    url: '{% url 'mainapp:get_species_path' %}',
+                    data: {genus: $('#region_genus').val()},
+                    type: 'get',
+                    dataType: "json",
+                    success: function (data) {
+
+
+                        if (data.status == 'success') {
+                            $('#region_species').empty();
+                            for (var i = 0; i < data.species_select.length; i++) {
+                                if ($("#region_species option[value='" + data.species_select[i] + "']").length > 0) {
+
+                                } else {
+                                    $('#region_species').append(new Option(data.species_select[i], data.species_select[i]));
+                                }
+                            }
+
+                        } else {
+
+
+                        }
+
+                    }, error: function () {
+
+                    }
+                });
+
+
+            })
+
+        });
+
+        function get_genus_path() {
+            $.ajax({
+                url: '{% url 'mainapp:get_genus_path' %}',
+                data: {},
                 type: 'get',
-                dataType : "json",
+                dataType: "json",
                 success: function (data) {
 
 
                     if (data.status == 'success') {
-                        $('#region_species').empty();
-                          for (var i = 0; i < data.species_select.length; i++) {
-                    if ($("#region_species option[value='" + data.species_select[i] + "']").length > 0) {
+                        $('#region_genus').empty();
+                        $('#region_genus').append(new Option("----------------------", ""));
 
-                    } else {
-                        $('#region_species').append(new Option(data.species_select[i], data.species_select[i]));
-                    }
-                }
+                        //set region select
+                        for (var i = 0; i < data.genus_select.length; i++) {
 
+                             $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
+
+                        }
+                        //sort_select();
                     } else {
 
 
@@ -393,12 +433,7 @@
 
                 }
             });
-
-
-
-            })
-
-        });
+        }
 
         function do_block() {
             $(".block-able").hide();
@@ -410,6 +445,22 @@
             $(".genome-stop").hide();
             $(".gtdbtk-stop").hide();
             $(".region-stop").hide();
+
+        }
+
+        function sort_select() {
+            var sort = $("select#region_genus>option").sort(
+                function (a, b) {
+
+                    return a.value.toLowerCase() > b.value.toLowerCase() ? 1 : -1;
+                }
+            );
+            $("select#region_genus").empty();         // 기존데이터 지우고
+            $("select#region_genus").append(sort); // 정렬된 데이터 넣어주고
+
+            $("select#region_genus>option:first").attr("selected", "selected"); // 처음껄로 selected
+            $("select#region_genus option:eq(0)").prop("selected", true);
+
 
         }
 
@@ -427,19 +478,7 @@
                     $("#gtdbtk_log").text(data.GTDBTK_status_log);
                     $("#gtdbtk_last_info").text(data.GTDBTK_last_updated);
                     $("#region_log").text(data.REGION_status_log);
-                    //set region select
-                    for (var i = 0; i < data.genus_select.length; i++) {
 
-
-                        if ($("#region_genus option[value='"+ data.genus_select[i] +"']").length > 0)
-                        {
-
-                        }
-                        else
-                        {
-                            $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
-                        }
-                    }
 
                     // 실행 상태
                     if (data.state == 'RUNNING') {
@@ -462,7 +501,7 @@
                             $(".region-stop").hide();
                         } else if (data.status == "REGION") {
                             do_block();
-                            var elem = document.getElementById("");
+                            var elem = document.getElementById("region_progress");
                             var width = data.process_current
                             elem.style.width = width + "%";
                             $(".genome-stop").hide();

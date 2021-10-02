@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('check', _ajax.check_status, name="check"),
     path('speciespath/get', _ajax.load_Species_path, name="get_species_path"),
+    path('genuspath/get', _ajax.load_genus_path, name="get_genus_path"),
     path('genome/upload', _ajax.upload_file, name="genome_upload"),
     path('genome/run', _ajax.genome_run, name="genome_run"),
     path('gtdbtk/run', _ajax.gtdbtk_run, name="gtdbtk_run"),

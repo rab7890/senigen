@@ -77,8 +77,9 @@ class DBController:
         conn.close()
 
     def set_process(self, val, total):
-        print("current val - {}".format(val))
+        print("current val - {} / total - {}".format(val, total))
         cur = round(val/total * 100, 1)
+        print(cur, total, val)
         conn = sqlite3.connect(self.db_file)
         conn.execute(
             "UPDATE {0} set progress_current_value = '{1}', progress_total_value = '{2}' WHERE id = '1';".format(self.table_name, cur, total))
