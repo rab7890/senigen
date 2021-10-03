@@ -116,7 +116,7 @@ def Specific_in_genus(dbc):
     for kmer in Common:
         fout.write(">"+Species+"_"+str(CNT_uniq)+"\n")
         CNT_uniq += 1
-        fout.write(SPECIFICPATH + "/" + kmer+"\n")
+        fout.write(kmer+"\n")
         dbc.set_status_log("Specific_in_genus kmer {}/{} 진행 중 ".format(cnt, total))
         cnt += 1
         dbc.set_process(cnt, total)
@@ -128,6 +128,7 @@ def Specific_in_genus(dbc):
 def Mapping(dbc):
     dbc.set_status_log("start mapping")
     os.chdir(SPECIFICPATH)
+
     rep_list = glob.glob(MEDIAPATH + "/Down/Representative/*.fna")
     total = len(rep_list)
     cnt = 0
@@ -178,7 +179,9 @@ if __name__ == '__main__':
                                                                                                          GC_ratio_max))
         dbc.set_running()
         Specific_in_genus(dbc)
-        Mapping(dbc)
+        os.chdir(SPECIFICPATH)
+        if os.stat("Uniq.txt").st_size != 0:
+            Mapping(dbc)
         dbc.set_idle()
     except Exception as e:
         print(traceback.format_exc())
