@@ -75,7 +75,6 @@ def Specific_in_genus(dbc):
                     sub_2.append(kmer_r)
                 sub_2 = list(set(sub_2))
                 sub_1 = set(sub_1) & set(sub_2)
-                print(len(sub_1))
                 #fout2.write(str(len(sub_1))+"\n")
                 #fout2.flush()
                 sub_2 = []
@@ -86,6 +85,7 @@ def Specific_in_genus(dbc):
     Common = sub_1
     dbc.set_status_log("start except_list")
     total = len(except_list)
+    cnt = 0
     for file_name in except_list:
         #fout2.write(file_name+"\n")
         #fout2.flush()
@@ -113,7 +113,7 @@ def Specific_in_genus(dbc):
     print("Common")
     print(Common)
     total = len(Common)
-    for kmer in Common :
+    for kmer in Common:
         fout.write(">"+Species+"_"+str(CNT_uniq)+"\n")
         CNT_uniq += 1
         fout.write(SPECIFICPATH + "/" + kmer+"\n")
