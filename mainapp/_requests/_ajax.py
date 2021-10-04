@@ -202,7 +202,7 @@ def region_run(request):
     return JsonResponse({'status': 'success'})
 
 def download(request):
-    with open(MEDIA_ROOT + '/test/1.txt', 'rb') as fsock:
+    with open(MEDIA_ROOT + '/Specific/Uniq.txt', 'rb') as fsock:
             response = HttpResponse()
             response['content_type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=download.txt'

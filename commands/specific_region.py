@@ -117,9 +117,9 @@ def Specific_in_genus(dbc):
         fout.write(">"+Species+"_"+str(CNT_uniq)+"\n")
         CNT_uniq += 1
         fout.write(kmer+"\n")
-        dbc.set_status_log("Specific_in_genus kmer {}/{} 진행 중 ".format(cnt, total))
+        #dbc.set_status_log("Specific_in_genus kmer {}/{} 진행 중 ".format(cnt, total))
         cnt += 1
-        dbc.set_process(cnt, total)
+        #dbc.set_process(cnt, total)
     fout.close()
     dbc.set_status_log("finish write kmer")
 
@@ -136,7 +136,7 @@ def Mapping(dbc):
         if Genus in rep_name:
             continue
         else:
-            systemstr = "bwa-mem2 mem -t 16 "+rep_name.replace(".fna", "")+" Uniq.txt | samtools sort -o aln.bam -"
+            systemstr = "bwa-mem2 mem -t 16" + rep_name.replace(".fna", "")+" Uniq.txt | samtools sort -o aln.bam -"
             os.system(systemstr)
             systemstr = "samtools view -bf 0x04 aln.bam > unmapped.bam"
             os.system(systemstr)

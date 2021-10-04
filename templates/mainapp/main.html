@@ -690,6 +690,7 @@
             $.ajax({
                 url: '{% url 'mainapp:region_download' %}',
                 method: 'POST',
+                async : false,
                 data: data,
                 success: function (data) {
                     var element = document.createElement('a');
