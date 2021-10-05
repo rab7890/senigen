@@ -328,10 +328,15 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-12"
                          style="margin: 1rem 0;margin-bottom: 0.5rem; padding:0 1rem; padding-bottom:1rem">
+                        <!--
                         <button class="btn btn-primary btn-style block-able" style="float: right"
                                 onclick="download_region_file()">
                             Download Result
-                        </button>
+                        </button>-->
+                        <a class="btn btn-primary btn-style block-able" style="float: right"
+                           href="{% url 'mainapp:region_download' %}">
+                            Download Result
+                        </a>
                     </div>
 
                 </div>
@@ -349,7 +354,17 @@
         }, 3000);
 
         $(document).ready(function () {
-             get_genus_path();
+
+
+            {% if messages %}
+                    {% for message in messages %}
+                       var a = '{{ message }}'
+                        alert(a);
+                    {% endfor %}
+
+            {% endif %}
+
+            get_genus_path();
             $("#first_icon").tooltip();
             $("#second_icon").tooltip();
             $("#third_icon").tooltip();
@@ -420,7 +435,7 @@
                         //set region select
                         for (var i = 0; i < data.genus_select.length; i++) {
 
-                             $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
+                            $('#region_genus').append(new Option(data.genus_select[i], data.genus_select[i]));
 
                         }
                         //sort_select();
@@ -690,19 +705,24 @@
             $.ajax({
                 url: '{% url 'mainapp:region_download' %}',
                 method: 'POST',
-                async : false,
+                async: false,
                 data: data,
                 success: function (data) {
-                    var element = document.createElement('a');
-                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
-                    element.setAttribute('download', 'download.txt');
+                    if (data.status === 'fail') {
+                        alert("no Uniq.txt")
+                    } else {
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+                        element.setAttribute('download', 'download.txt');
 
-                    element.style.display = 'none';
-                    document.body.appendChild(element);
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
 
-                    element.click();
+                        element.click();
 
-                    document.body.removeChild(element);
+                        document.body.removeChild(element);
+                    }
+
                 },
                 error: function (err) {
                     console.log('Error downloading file');

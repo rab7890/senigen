@@ -1,11 +1,15 @@
+import mimetypes
 import os
 import subprocess
 import signal
 import sys
 import time
+from wsgiref.util import FileWrapper
 
+from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
 
@@ -200,11 +204,35 @@ def region_run(request):
     RegionInfo.objects.filter(id=1).update(pid=proc.pid, last_run_date=timezone.now())
     MainInfo.objects.filter(id=1).update(last_type='REGION', last_pid=proc.pid, error_type='', error_msg='', is_error=False)
     return JsonResponse({'status': 'success'})
-
+class FixedFileWrapper(FileWrapper):
+    def __iter__(self):
+        self.filelike.seek(0)
+        return self
 def download(request):
-    with open(MEDIA_ROOT + '/Specific/Uniq.txt', 'rb') as fsock:
+    if os.path.exists(MEDIA_ROOT + '/Specific/Uniq.txt'):
+        the_file = MEDIA_ROOT + '/Specific/Uniq.txt'
+        with open(the_file, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="text/plain")
+            response['Content-Disposition'] = 'attachment; filename=' + 'download.txt'
+            return response
+        """
+        with open(the_file, 'rb') as fsock:
+            
             response = HttpResponse()
             response['content_type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=download.txt'
             response.write(fsock.read())
+            
+            chunk_size = 8192
+            response = StreamingHttpResponse(FixedFileWrapper(open(the_file, 'rb'), chunk_size),
+                                             content_type=mimetypes.guess_type(the_file)[0])
+            response['Content-Length'] = os.path.getsize(the_file)
+            response['Content-Disposition'] = "attachment; filename=%s" % 'download.txt'
+           
             return response
+        """
+    else:
+        messages.add_message(request, messages.INFO, 'no Uniq.txt')
+        return redirect('home')
+
+

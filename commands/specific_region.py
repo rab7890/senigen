@@ -35,7 +35,7 @@ def Specific_in_genus(dbc):
         except_list += glob.glob(GTDBTKPATH + "/reassigned/"+Genus+"/"+target_folder+"/*.fna")
     print("except_list")
     print(except_list)
-    fout = open(SPECIFICPATH + "/Uniq.txt", 'w')
+    fout = open(SPECIFICPATH + "/Uniq1.txt", 'w')
     #fout2=open("log.txt",'w')
 
     sub_1 = []
@@ -136,12 +136,16 @@ def Mapping(dbc):
         if Genus in rep_name:
             continue
         else:
-            systemstr = "bwa-mem2 mem -t 16" + rep_name.replace(".fna", "")+" Uniq.txt | samtools sort -o aln.bam -"
+            systemstr = "bwa-mem2 mem -t 16 "+rep_name.replace(".fna", "")+" Uniq1.txt | samtools sort -o aln.bam -"
             os.system(systemstr)
             systemstr = "samtools view -bf 0x04 aln.bam > unmapped.bam"
             os.system(systemstr)
-            systemstr = "samtools bam2fq unmapped.bam > Uniq.txt"
+            systemstr = "samtools bam2fq unmapped.bam > Uniq1.txt"
             os.system(systemstr)
+            #systemstr = "seqtk seq -A Uniq1.txt > temp.fa"
+            #os.system(systemstr)
+            #systemstr = "mv temp.fa Uniq1.txt"
+            #os.system(systemstr)
         dbc.set_status_log("Mapping {}/{} 진행 중 ".format(cnt, total))
         cnt += 1
         dbc.set_process(cnt, total)
@@ -153,7 +157,7 @@ def Mapping(dbc):
 
 #GC Filtering
 def GC_Filter():
-    fin = open("Uniq.txt", 'r')
+    fin = open("Uniq1.txt", 'r')
     fout = open("Uniq_filtered.txt", 'w')
     for line in SeqIO.parse(fin, 'fasta'):
         if int(GC_ratio_min) < int(GC(line.seq)) < int(GC_ratio_max):
@@ -178,9 +182,10 @@ if __name__ == '__main__':
                                                                                                          , GC_ratio_min,
                                                                                                          GC_ratio_max))
         dbc.set_running()
-        Specific_in_genus(dbc)
+        #Specific_in_genus(dbc)
         os.chdir(SPECIFICPATH)
-        if os.stat("Uniq.txt").st_size != 0:
+        if os.stat("Uniq1.txt").st_size != 0:
+            pass
             Mapping(dbc)
         dbc.set_idle()
     except Exception as e:
