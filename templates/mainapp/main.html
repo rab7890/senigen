@@ -25,7 +25,7 @@
             border: 2px solid #c7c6c6;
             padding: 0.5rem 1.5rem;
             font-weight: bold;
-            z-index: 50;
+            z-index: 100;
             position: absolute;
             top: -1.7rem;
             color: #306396;
@@ -95,7 +95,8 @@
             background-color: #d2def4;
             margin: 0;
             padding: 0;
-            height: 750px;
+            height: 100%;
+            z-index: 50;
         }
 
 
@@ -142,7 +143,8 @@
             color: #fff;
         }
     </style>
-    <div class="row" style="margin-left: -0.1rem;margin-right: -0.1rem">
+
+    <div class="row" style="margin-left: -0.1rem;margin-right: -0.1rem; height: 100%">
         <div class="tabs">
             <input id="radio_region" type="radio" name="tab_item" checked>
             <label class="tab_item" for="radio_region">Find Specific Region</label>
@@ -304,10 +306,10 @@
                             <div class="col-4 col-sm-4 col-md-4" style="margin: 0;padding: 0.3rem;left: 0.1rem">
                                 <div class="div-label">GC contents</div>
                             </div>
-                            <div class="col-8 col-sm-8 col-md-8" style="margin: 0;padding-left: 1.8rem; ">
+                            <div class="col-8 col-sm-8 col-md-8" style="margin: 0;padding-left: 1.7rem; ">
                                 <div style="float: left">
-                                    <input id="region_GC_min" type="text" style="width: 9.3rem;height: 2.6rem;"/>~
-                                    <input id="region_GC_max" type="text" style="width: 9.3rem;height: 2.6rem;"/>
+                                    <input id="region_GC_min" type="text" style="width: 9.4rem;height: 2.6rem;"/>~
+                                    <input id="region_GC_max" type="text" style="width: 9.4rem;height: 2.6rem;"/>
                                 </div>
                             </div>
                         </div>
@@ -337,6 +339,9 @@
                            href="{% url 'mainapp:region_download' %}">
                             Download Result
                         </a>
+                        <script>
+
+                        </script>
                     </div>
 
                 </div>
@@ -345,8 +350,35 @@
         </div>
     </div>
 
+<style>
+.tooltip-inner {
+  padding: 1rem;
+  color: black;
+    text-align: center;
+  background-color: white;
+  border-radius: 5px;
+    font-size:10pt;
 
+    max-width: 20rem;
 
+z-index: 1000;
+position: absolute;
+    top: -1.5rem;
+    left: 5rem;
+}
+.tooltip {
+z-index: 1000;
+     min-width: 5rem;
+    max-width: 10rem;
+    text-align: center;
+    padding: 1rem;
+}
+.tooltip-arrow
+{
+    display: none;
+}
+
+</style>
     <script>
         // 3초 마다 상태 체크
         const idVar = setInterval(() => {
@@ -354,19 +386,22 @@
         }, 3000);
 
         $(document).ready(function () {
-
-
+        /*
+        window.onmouseover=function(e) {
+        console.log(e.target.className);
+};*/
             {% if messages %}
-                    {% for message in messages %}
-                       var a = '{{ message }}'
-                        alert(a);
-                    {% endfor %}
+                {% for message in messages %}
+                    var a = '{{ message }}'
+                    alert(a);
+                {% endfor %}
 
             {% endif %}
 
             get_genus_path();
             $("#first_icon").tooltip();
             $("#second_icon").tooltip();
+
             $("#third_icon").tooltip();
 
             var elem = document.getElementById("genome_progress");
@@ -494,7 +529,7 @@
                     $("#gtdbtk_last_info").text(data.GTDBTK_last_updated);
                     $("#region_log").text(data.REGION_status_log);
 
-
+                    $("#region_result_txt").text(data.uniq_filtered)
                     // 실행 상태
                     if (data.state == 'RUNNING') {
                         if (data.status == "GENOME") {

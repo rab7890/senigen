@@ -25,6 +25,17 @@ def check_status(request):
     gtdbtk_obj = GTDBTKInfo.objects.get(id=1)
     region_obj = RegionInfo.objects.get(id=1)
 
+    # read uniq_filtered.fa content
+    the_file = MEDIA_ROOT + '/Specific/Uniq_filtered.fa'
+    if os.stat(the_file).st_size != 0:
+        with open(the_file, 'r') as fh:
+            txt = fh.readlines()
+            res = ''
+            for v in txt[:15]:
+                res += v
+            res = res.strip('\n') + '...................'
+            data['uniq_filtered'] = res
+
     # GENOME
     if genome_obj.status_log:
         data['GENOME_status_log'] = genome_obj.status_log
@@ -89,6 +100,7 @@ def check_status(request):
             data['status'] = "REGION"
             data['process_total'] = region_obj.progress_total_value
             data['process_current'] = region_obj.progress_current_value
+
     return JsonResponse(data)
 
 def load_Species_path(request):
@@ -208,12 +220,13 @@ class FixedFileWrapper(FileWrapper):
     def __iter__(self):
         self.filelike.seek(0)
         return self
+
 def download(request):
-    if os.path.exists(MEDIA_ROOT + '/Specific/Uniq.txt'):
-        the_file = MEDIA_ROOT + '/Specific/Uniq.txt'
+    if os.path.exists(MEDIA_ROOT + '/Specific/Uniq_filtered.fa'):
+        the_file = MEDIA_ROOT + '/Specific/Uniq_filtered.fa'
         with open(the_file, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="text/plain")
-            response['Content-Disposition'] = 'attachment; filename=' + 'download.txt'
+            response['Content-Disposition'] = 'attachment; filename=' + 'Specific_region.fa'
             return response
         """
         with open(the_file, 'rb') as fsock:
