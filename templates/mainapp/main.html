@@ -157,7 +157,7 @@
 
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="title">Download and Update Genome <i id="first_icon" class="fa fa-question-circle"
-                                                                         title="first icon"></i></div>
+                                                                        ></i></div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12" style="margin-top: 2.5rem">
                         <textarea style="width: 100%; height: 110px;" id="genome_log"></textarea>
@@ -218,7 +218,7 @@
                 <div class="row gray area">
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="title">GTDBTK Classification <i id="second_icon" class="fa fa-question-circle"
-                                                                    title="second icon"></i></div>
+                                                                    ></i></div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
                         <textarea style="width: 100%; height: 110px;" id="gtdbtk_log"></textarea>
@@ -247,7 +247,7 @@
                 <div class="row gray area">
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="title">Find Specific Region <i id="third_icon" class="fa fa-question-circle"
-                                                                   title="third icon"></i></div>
+                                                                   ></i></div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12" style="margin-top: 3rem">
                         <textarea style="width: 100%; height: 110px;" id="region_log"></textarea>
@@ -358,20 +358,22 @@
   background-color: white;
   border-radius: 5px;
     font-size:10pt;
-
-    max-width: 20rem;
-
 z-index: 1000;
 position: absolute;
     top: -1.5rem;
-    left: 5rem;
+    left: 180px;
+    min-width: 300px;
+    max-width: 800px;
+    white-space: pre-line;
 }
 .tooltip {
 z-index: 1000;
-     min-width: 5rem;
-    max-width: 10rem;
+
+      min-width: 300px;
+    max-width: 800px;
     text-align: center;
     padding: 1rem;
+    white-space: pre-line;
 }
 .tooltip-arrow
 {
@@ -399,10 +401,15 @@ z-index: 1000;
             {% endif %}
 
             get_genus_path();
-            $("#first_icon").tooltip();
-            $("#second_icon").tooltip();
+            $("#first_icon").tooltip({'title':"<Download and Update Genome>\n" + `파일선택 : 사용자의 Custom Genome을 업로드 합니다.파일은 반드시 FASTA형태여야하며 확장자는 fna로 통일합니다.
+Upload : 선택한 파일을 업로드합니다.
+Assembly Level : NCBI Refseq으로부터 Download 받을 Assembly 수준을 설정합니다.
+Run : DB 업데이트를 수행합니다.`});
+            $("#second_icon").tooltip({'title':"<GTDBTK Classification>\n"+`신규 Genome이 있으면 확인하여 GTDBTK를 통한 assignment를 수행합니다.`});
 
-            $("#third_icon").tooltip();
+            $("#third_icon").tooltip({'title': "<Find Specific Region>" + `
+Target 종을 대상으로 Primer 제작을 위한 Specific Region을 발굴합니다.Genus, Species - GTDBTK 기반으로 분류된 Target 종을 설정합니다.
+K-mer Length : K-mer 기반 탐색을 수행할 길이를 설정합니다.목표 Amplicon Size를 감안하여 크기를 설정합니다.길이에 따라 Specific K-mer가 발굴되지 않을 수 있습니다.Specific K-mer가 발굴되지 않는 경우 크기를 줄입니다.일반적인 경우 100bp 정도가 적합합니다.`});
 
             var elem = document.getElementById("genome_progress");
             elem.style.width = "0%";
