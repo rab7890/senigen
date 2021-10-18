@@ -245,7 +245,7 @@ def download(request):
             return response
         """
     else:
-        messages.add_message(request, messages.INFO, 'no Uniq.txt')
+        messages.add_message(request, messages.INFO, 'no Uniq_filtered.fa')
         return redirect('home')
 
 
